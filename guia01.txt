@@ -1,0 +1,30 @@
+1.a. {{0, 0, 0}, {0, 0, 1}, {0, 1, 0} {1, 0, 0}, {1, 0, 1}}
+1.b. {{1, 0, 1}, {0, 1, 0}}
+1.c. {{0}, {1}, {0, 0}, {0, 1}, {1, 0}, {1, 0, 1}, {0, 1, 0}} # Duda: Por la definición del enunciado, que no hace mención de que una solución parcial esté "encaminada" a ser solución válida, debería incluir a todas las posibilidades (ej. {0, 0, 0}, {1, 1, 1}). ¿Esto es así? Misma duda para el caso 1.a. con las candidatas... el enunciado parece sugerir que son las 8 combinaciones posibles...
+1.d. Los nodos internos del árbol son las soluciones parciales, las hojas son las soluciones (las candidatas y las válidas, que son subconjunto de las candidatas).
+{} # 0
+ |
+ -- {0} # 0
+ |    |
+ |    -- {0, 0} # 0
+ |    |       |
+ |    |       -- {0, 0, 0} # 6 (X)
+ |    |       |
+ |    |       -- {0, 0, 1} # 6 (X)
+ |    |
+ |    -- {0, 1} # 12 (O)
+ |
+ -- {1} # 6
+	  |
+	  -- {1, 0} # 6
+	  |       |
+	  |       -- {1, 0, 0} # 6 (X)
+	  |       |
+	  |       -- {1, 0, 1} # 12 (O)
+	  |
+	  -- {1, 1} # 18 (X)
+1.e. He sido magicamente convencido.
+Hablando más en serio, tiene sentido. Se llega a un OR entre todas hojas del árbol, es decir entre las combinaciones posibles de elementos del multiconjunto original (fuerza bruta), o entre sólo las válidas si se podan las ramas a partir de que se realizaría un llamado recursivo con k negativo (backtracking).
+1.f. Estoy fervientemente convencido. Es un 1 a 1 con el algoritmo en el abstracto del punto anterior.
+1.g. 
+subset_sum()
