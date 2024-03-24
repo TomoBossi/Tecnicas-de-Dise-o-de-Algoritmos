@@ -1,7 +1,8 @@
 1.a. {{0, 0, 0}, {0, 0, 1}, {0, 1, 0} {1, 0, 0}, {1, 0, 1}}
 1.b. {{1, 0, 1}, {0, 1, 0}}
-1.c. {{0}, {1}, {0, 0}, {0, 1}, {1, 0}, {1, 0, 1}, {0, 1, 0}} # Duda: Por la definición del enunciado, que no hace mención de que una solución parcial esté "encaminada" a ser solución válida, debería incluir a todas las posibilidades (ej. {0, 0, 0}, {1, 1, 1}). ¿Esto es así? Misma duda para el caso 1.a. con las candidatas... el enunciado parece sugerir que son las 8 combinaciones posibles...
+1.c. {{0}, {1}, {0, 0}, {0, 1}, {1, 0}, {1, 0, 1}, {0, 1, 0}} # Duda: Por la definición del enunciado, que no hace mención de que una solución parcial esté "encaminada" a ser solución válida, debería incluir a todas las posibilidades (ej. {0, 0, 0}, {1, 1, 1}). ¿Esto es así? Misma duda para el caso 1.a. para las candidatas: el enunciado parece sugerir que las candidatas son las 8 combinaciones posibles...
 1.d. Los nodos internos del árbol son las soluciones parciales, las hojas son las soluciones (las candidatas y las válidas, que son subconjunto de las candidatas).
+
 {} # 0
  |
  -- {0} # 0
@@ -23,8 +24,126 @@
 	  |       -- {1, 0, 1} # 12 (O)
 	  |
 	  -- {1, 1} # 18 (X)
+
 1.e. He sido magicamente convencido.
-Hablando más en serio, tiene sentido. Se llega a un OR entre todas hojas del árbol, es decir entre las combinaciones posibles de elementos del multiconjunto original (fuerza bruta), o entre sólo las válidas si se podan las ramas a partir de que se realizaría un llamado recursivo con k negativo (backtracking).
-1.f. Estoy fervientemente convencido. Es un 1 a 1 con el algoritmo en el abstracto del punto anterior.
-1.g. 
-subset_sum()
+Hablando más en serio, tiene sentido. Se llega a un OR entre todas hojas del árbol, es decir entre las combinaciones posibles de elementos del multiconjunto original (fuerza bruta). Se podrían probar sólo las válidas si se podan las ramas a partir de que se realizaría un llamado recursivo con k negativo o cero (backtracking).
+1.f. Estoy fervientemente convencido. Es un 1 a 1 con el algoritmo del punto anterior.
+1.g. El árbol es equivalente, pero más grande por la falta de poda (ya que estamos, no estoy seguro de que se haya esperado que haya poda en el árbol del ejercicio 1.d.).
+
+subset_sum({6, 12, 6}, 3, 12)
+          |
+          -- subset_sum({6, 12, 6}, 2, 12)
+          |            |
+          |            -- subset_sum({6, 12, 6}, 1, 12)
+          |            |            |
+          |            |            -- subset_sum({6, 12, 6}, 0, 12) # False ---------
+          |            |            |                                                 |
+          |            |            -- subset_sum({6, 12, 6}, 0, 6) # False ----------
+          |            |                                                              |
+          |            -- subset_sum({6, 12, 6}, 1, 0)                                |
+          |                         |                                                 |
+          |                         -- subset_sum({6, 12, 6}, 0, 0) # True {0, 1, 0} -
+          |                         |                                                 |
+          |                         -- subset_sum({6, 12, 6}, 0, -6) # False ---------|
+          |                                                                           |
+          -- subset_sum({6, 12, 6}, 2, 6)                                              --> OR # True
+                       |                                                              |
+                       -- subset_sum({6, 12, 6}, 1, 6)                                |
+                       |            |                                                 |
+                       |            -- subset_sum({6, 12, 6}, 0, 6) # False ----------
+                       |            |                                                 |
+                       |            -- subset_sum({6, 12, 6}, 0, 0) # True {1, 0, 1} -
+                       |                                                              |
+                       -- subset_sum({6, 12, 6}, 1, -6)                               |
+                                    |                                                 |
+                                    -- subset_sum({6, 12, 6}, 0, -6) # False ---------
+                                    |                                                 |
+                                    -- subset_sum({6, 12, 6}, 0, -12) # False --------
+
+1.h. Estoy ridiculamente convencido. Mi convencimiento es tal que me siento casi extasiado, como si al borde de la muerte del ego. En el algoritmo descripto, j < 0 (condición de retorno, poda) implica que la suma parcial de elementos del multiconjunto ya superó k (y por lo tanto, la solución ya no es válida).
+1.i. La regla es: Podar devolviendo False si S, la suma parcial de los elementos aún no considerados de C, es menor a k. Si es exactamente k, podar devolviendo True. Pecando de circular, la "mostración" está en que si se cumple la condición descripta, la rama no puede tener soluciones válidas.
+1.j. 
+1) subset_sum(C, i, j, solution): // implementa ss({c1, ..., ci}, j)
+2) Si j < 0, retornar falso // regla de factibilidad
+3) Si i = 0: Si j = 0 imprimir solution y retornar verdadero, si no retornar falso
+4) Si no, retornar subset_sum(C, i − 1, j, solution) ∨ subset_sum(C, i − 1, j − C[i], concat(C[i], solution))
+
+2.a. (n**2)! : Hay n**2 posiciones posibles para el 1, n**2 - 1 posiciones para el 2, ..., una única posición libre para el n**2.
+2.b. La solución está dada por cuantos_cuadrados_magicos(n, [[0, ..., 0], ..., [0, ..., 0]], 1, 1, {1, ..., n**2})
+
+algoritmo cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros): // cuadrado es la grilla de valores, i es el indice de la fila, j de la columna, numeros es el conjunto de numeros posibles de la que se poppea un valor en cada llamado recursivo
+    algoritmo es_cuadrado_magico(n, cuadrado):
+        referencia = suma(cuadrado[0]) // suma primera fila
+        filas_validas = para cada fila de 1 a n, la suma de los elementos es = referencia
+        columnas_validas = para cada columna de 1 a n, la suma de los elementos es = referencia
+        diagonales_validas = para ambas diagonales, la suma de los elementos es = referencia
+        retornar filas_validas ^ columnas_validas ^ diagonales_validas
+    si i = n+1 y j = 1, retornar es_cuadrado_magico(n, cuadrado) // al sumar booleanos, verdadero = 1 y falso = 0
+    si no, si i <= n y j < n, calcular la suma entre los #(numeros) llamados recursivos a cuantos_cuadrados_magicos(n, cuadrado_mod, i, j+1, numeros_pop) // apelo a la intuición del lector
+           si i <= n y j = n, calcular la suma entre los #(numeros) llamados recursivos a cuantos_cuadrados_magicos(n, cuadrado_mod, i+1, 1, numeros_pop)
+           backtrackear y retornar la suma calculada
+
+No voy a mostrar los primeros dos niveles del árbol de backtracking para n = 3. O estoy delirando o lo que están pidiendo implica mostrar 9*8 = 72 nodos, que tengan muy buenas tardes.
+2.c. Por la misma lógica que en 2.a., y por la misma lógica con la que elegí no mostrar los primeros dos niveles del árbol de backtracking para n = 3, el árbol siempre (no solo en el peor caso, si no hay poda) tiene O((n**2)!) nodos.
+2.d. El enunciado implica que uno conoce el valor del número mágico de orden n (si no, ¿cómo podría saberse que una fila o columna se pasó?), pero es recién en 2.e. que este dato explicita que se menciona que deberían hacerse modificaciones a 2.d. con esa nueva información. Esto no tiene sentido.
+La poda podría mejorarse incorporando también las diagonales.
+2.e. Demo: 
+La suma de las n filas es nM, las n filas son todos los números de 1 a n**2. Entonces nM = (n**2)*(n**2 + 1)/2 (Gauss). Despejando para M, M = (n**3 + n)/2.
+Por lo tanto, si M existe, vale (n**3 + n)/2.
+
+algoritmo cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros): // cuadrado es la grilla de valores, i es el indice de la fila, j de la columna, numeros es el conjunto de numeros posibles de la que se poppea un valor en cada llamado recursivo
+    algoritmo es_cuadrado_magico(n, cuadrado):
+        filas_validas = para cada fila de 1 a n, la suma de los elementos es = n_magi
+        columnas_validas = para cada columna de 1 a n, la suma de los elementos es = n_magi
+        diagonales_validas = para ambas diagonales, la suma de los elementos es = n_magi
+        retornar filas_validas ^ columnas_validas ^ diagonales_validas
+    si i = n+1 y j = 1, retornar es_cuadrado_magico(n, cuadrado) // al sumar booleanos, verdadero = 1 y falso = 0
+    chequear cuales valores en numeros dan solución parcial válida (< numero mágico) o solución invalida (> numero magico, o = con i o j < n (según chequeo de fila o columna))    
+    si no, si i <= n y j < n, calcular la suma entre los llamados recursivos válidos a cuantos_cuadrados_magicos(n, cuadrado_mod, i, j+1, numeros_pop) // apelo a la intuición del lector
+           si i <= n y j = n, calcular la suma entre los llamados recursivos válidos a cuantos_cuadrados_magicos(n, cuadrado_mod, i+1, 1, numeros_pop)
+           backtrackear y retornar la suma calculada
+
+Para una implementación medianamente fiel, ver guia01.py.
+
+3.a. La solución está dada por maxisubconjunto(n, k, M, {1, ..., n}, {}, 0).
+Las soluciones válidas son las que dan el valor máximo de sumatoria. Las parciales se van construyendo y evaluando a partir de {}.
+
+algoritmo maxiconjunto(n, k, M, numeros, solucion, suma):
+    algoritmo maxisubconjunto_aux(n, k, M, numeros, solucion, optimo):
+        algoritmo sumatoria(M, indices):
+            inicializar res en 0
+            para cada indice i en indices:
+                para cada indice j en indices:
+                    res += M[i, j]
+            retornar res
+
+        si #(solucion) = k:
+            retornar [(suma, solucion)]
+
+        res = []
+        para cada numero en numeros:
+            concatenar res con algoritmo maxisubconjunto_aux(n, k, M, numeros - {numero}, solucion + {numero}, sumatoria(M, solucion + {numero}))
+        retornar res
+
+    retornar el primer elemento de algoritmo maxisubconjunto_aux(n, k, M, numeros, solucion, optimo) ordenado de mayor a menor en el primer elemento de cada tupla
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
