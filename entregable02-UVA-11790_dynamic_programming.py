@@ -13,7 +13,7 @@ def longest_subsequence(heights: list[int], widths: list[int], reverse: bool = F
     N = len(heights)
     M = [(widths[N-1], N-1)]
 
-    def insert_in_order(M, data):       
+    def insert_in_order(M, data):
         i = 0
         not_added = True
         while i < len(M) and not_added:
