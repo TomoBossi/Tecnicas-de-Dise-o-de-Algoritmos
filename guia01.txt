@@ -1,8 +1,13 @@
-1.a. {{0, 0, 0}, {0, 0, 1}, {0, 1, 0} {1, 0, 0}, {1, 0, 1}}
-1.b. {{1, 0, 1}, {0, 1, 0}}
-1.c. {{0}, {1}, {0, 0}, {0, 1}, {1, 0}, {1, 0, 1}, {0, 1, 0}} # Duda: Por la definición del enunciado, que no hace mención de que una solución parcial esté "encaminada" a ser solución válida, debería incluir a todas las posibilidades (ej. {0, 0, 0}, {1, 1, 1}). ¿Esto es así? Misma duda para el caso 1.a. para las candidatas: el enunciado parece sugerir que las candidatas son las 8 combinaciones posibles...
-1.d. Los nodos internos del árbol son las soluciones parciales, las hojas son las soluciones (las candidatas y las válidas, que son subconjunto de las candidatas).
+// Duda: No estoy seguro de si cuando se pide diseñar un algoritmo (ejemplo ej. 3) se pide la formula "matemática" o un pseudocódigo. Como se piden complejidades espaciales, creo casi necesario al pseudocódigo.
 
+1.a. 
+{{0, 0, 0}, {0, 0, 1}, {0, 1, 0} {1, 0, 0}, {1, 0, 1}}
+1.b. 
+{{1, 0, 1}, {0, 1, 0}}
+1.c. 
+{{0}, {1}, {0, 0}, {0, 1}, {1, 0}, {1, 0, 1}, {0, 1, 0}} // Duda: Por la definición del enunciado, que no hace mención de que una solución parcial esté "encaminada" a ser solución válida, debería incluir a todas las posibilidades (ej. {0, 0, 0}, {1, 1, 1}). ¿Esto es así? Misma duda para el caso 1.a. para las candidatas: el enunciado parece sugerir que las candidatas son las 8 combinaciones posibles...
+1.d. 
+Los nodos internos del árbol son las soluciones parciales, las hojas son las soluciones (las candidatas y las válidas, que son subconjunto de las candidatas).
 {} # 0
  |
  -- {0} # 0
@@ -24,12 +29,15 @@
 	  |       -- {1, 0, 1} # 12 (O)
 	  |
 	  -- {1, 1} # 18 (X)
-
-1.e. He sido magicamente convencido.
+1.e. 
+He sido magicamente convencido.
 Hablando más en serio, tiene sentido. Se llega a un OR entre todas hojas del árbol, es decir entre las combinaciones posibles de elementos del multiconjunto original (fuerza bruta). Se podrían probar sólo las válidas si se podan las ramas a partir de que se realizaría un llamado recursivo con k negativo o cero (backtracking).
-1.f. Estoy fervientemente convencido. Es un 1 a 1 con el algoritmo del punto anterior.
-1.g. El árbol es equivalente, pero más grande por la falta de poda (ya que estamos, no estoy seguro de que se haya esperado que haya poda en el árbol del ejercicio 1.d.).
-
+1.f. 
+Estoy fervientemente convencido. Es un 1 a 1 con el algoritmo del punto anterior.
+Se hacen máximo dos llamados recursivos por llamado a la función, con complejidad O(1) en cada llamado y N como altura máxima (N = |C|).
+Por lo tanto la complejidad temporal de peor caso es O(2^N).
+1.g. 
+El árbol es equivalente, pero más grande por la falta de poda (ya que estamos, no estoy seguro de que se haya esperado que haya poda en el árbol del ejercicio 1.d.).
 subset_sum({6, 12, 6}, 3, 12)
           |
           -- subset_sum({6, 12, 6}, 2, 12)
@@ -59,18 +67,20 @@ subset_sum({6, 12, 6}, 3, 12)
                                     -- subset_sum({6, 12, 6}, 0, -6) # False ---------
                                     |                                                 |
                                     -- subset_sum({6, 12, 6}, 0, -12) # False --------
-
-1.h. Estoy ridiculamente convencido. Mi convencimiento es tal que me siento casi extasiado, como si al borde de la muerte del ego. En el algoritmo descripto, j < 0 (condición de retorno, poda) implica que la suma parcial de elementos del multiconjunto ya superó k (y por lo tanto, la solución ya no es válida).
-1.i. La regla es: Podar devolviendo False si S, la suma parcial de los elementos aún no considerados de C, es menor a k. Si es exactamente k, podar devolviendo True. Pecando de circular, la "mostración" está en que si se cumple la condición descripta, la rama no puede tener soluciones válidas.
+1.h. 
+Estoy ridiculamente convencido. Mi convencimiento es tal que me siento casi extasiado, como si al borde de la muerte del ego. En el algoritmo descripto, j < 0 (condición de retorno, poda) implica que la suma parcial de elementos del multiconjunto ya superó k (y por lo tanto, la solución ya no es válida).
+1.i. 
+La regla es: Podar devolviendo False si S, la suma parcial de los elementos aún no considerados de C, es menor a k. Si es exactamente k, podar devolviendo True. Pecando de circular, la "mostración" está en que si se cumple la condición descripta, la rama no puede tener soluciones válidas.
 1.j. 
 1) subset_sum(C, i, j, solution): // implementa ss({c1, ..., ci}, j)
 2) Si j < 0, retornar falso // regla de factibilidad
 3) Si i = 0: Si j = 0 imprimir solution y retornar verdadero, si no retornar falso
 4) Si no, retornar subset_sum(C, i − 1, j, solution) ∨ subset_sum(C, i − 1, j − C[i], concat(C[i], solution))
 
-2.a. (n**2)! : Hay n**2 posiciones posibles para el 1, n**2 - 1 posiciones para el 2, ..., una única posición libre para el n**2.
-2.b. La solución está dada por cuantos_cuadrados_magicos(n, [[0, ..., 0], ..., [0, ..., 0]], 1, 1, {1, ..., n**2})
-
+2.a. 
+(n**2)! : Hay n**2 posiciones posibles para el 1, n**2 - 1 posiciones para el 2, ..., una única posición libre para el n**2.
+2.b. 
+La solución está dada por cuantos_cuadrados_magicos(n, [[0, ..., 0], ..., [0, ..., 0]], 1, 1, {1, ..., n**2})
 algoritmo cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros): // cuadrado es la grilla de valores, i es el indice de la fila, j de la columna, numeros es el conjunto de numeros posibles de la que se poppea un valor en cada llamado recursivo
     algoritmo es_cuadrado_magico(n, cuadrado):
         referencia = suma(cuadrado[0]) // suma primera fila
@@ -82,15 +92,16 @@ algoritmo cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros): // cuadrado es 
     si no, si i <= n y j < n, calcular la suma entre los #(numeros) llamados recursivos a cuantos_cuadrados_magicos(n, cuadrado_mod, i, j+1, numeros_pop) // apelo a la intuición del lector
            si i <= n y j = n, calcular la suma entre los #(numeros) llamados recursivos a cuantos_cuadrados_magicos(n, cuadrado_mod, i+1, 1, numeros_pop)
            backtrackear y retornar la suma calculada
-
 No voy a mostrar los primeros dos niveles del árbol de backtracking para n = 3. O estoy delirando o lo que están pidiendo implica mostrar 9*8 = 72 nodos, que tengan muy buenas tardes.
-2.c. Por la misma lógica que en 2.a., y por la misma lógica con la que elegí no mostrar los primeros dos niveles del árbol de backtracking para n = 3, el árbol siempre (no solo en el peor caso, si no hay poda) tiene O((n**2)!) nodos.
-2.d. El enunciado implica que uno conoce el valor del número mágico de orden n (si no, ¿cómo podría saberse que una fila o columna se pasó?), pero es recién en 2.e. que este dato explicita que se menciona que deberían hacerse modificaciones a 2.d. con esa nueva información. Esto no tiene sentido.
+2.c. 
+Por la misma lógica que en 2.a., y por la misma lógica con la que elegí no mostrar los primeros dos niveles del árbol de backtracking para n = 3, el árbol siempre (no solo en el peor caso, si no hay poda) tiene O((n**2)!) nodos.
+2.d. 
+El enunciado implica que uno conoce el valor del número mágico de orden n (si no, ¿cómo podría saberse que una fila o columna se pasó?), pero es recién en 2.e. que este dato explicita que se menciona que deberían hacerse modificaciones a 2.d. con esa nueva información. Esto no tiene sentido.
 La poda podría mejorarse incorporando también las diagonales.
-2.e. Demo: 
+2.e. 
+Demo: 
 La suma de las n filas es nM, las n filas son todos los números de 1 a n**2. Entonces nM = (n**2)*(n**2 + 1)/2 (Gauss). Despejando para M, M = (n**3 + n)/2.
 Por lo tanto, si M existe, vale (n**3 + n)/2.
-
 algoritmo cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros): // cuadrado es la grilla de valores, i es el indice de la fila, j de la columna, numeros es el conjunto de numeros posibles de la que se poppea un valor en cada llamado recursivo
     algoritmo es_cuadrado_magico(n, cuadrado):
         filas_validas = para cada fila de 1 a n, la suma de los elementos es = n_magi
@@ -102,48 +113,148 @@ algoritmo cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros): // cuadrado es 
     si no, si i <= n y j < n, calcular la suma entre los llamados recursivos válidos a cuantos_cuadrados_magicos(n, cuadrado_mod, i, j+1, numeros_pop) // apelo a la intuición del lector
            si i <= n y j = n, calcular la suma entre los llamados recursivos válidos a cuantos_cuadrados_magicos(n, cuadrado_mod, i+1, 1, numeros_pop)
            backtrackear y retornar la suma calculada
-
 Para una implementación medianamente fiel, ver guia01.py.
 
-3.a. La solución está dada por maxisubconjunto(n, k, M, {1, ..., n}, {}, 0).
-Las soluciones válidas son las que dan el valor máximo de sumatoria. Las parciales se van construyendo y evaluando a partir de {}.
+3.a. 
+Ver guia01e03.py.
+3.b.
+En cada llamado se hacen dos llamados recursivos, y la altura del arbol es a lo sumo N. Por lo tanto la cota superior de llamados es O(2^N).
+En cada llamado se calcula un nuevo incremento a la suma, que es a lo sumo O(K). El resto de las operaciones son O(1).
+Por lo tanto la complejidad temporal del algoritmo es O(2^N*K)
+En complejidad espacial, suponiendo que se implementa al algoritmo de forma tal que M y SOLUCION_PARCIAL sean pasados por referencia 
+(y existan como único valor en memoria en todo momento), el algoritmo debería ser O(N^2 + K) por las estructuras de datos.
+Como además el call stack puede a lo sumo tener N llamados recursivos apilados (la cota de altura del árbol), 
+y cada llamado debería requerir O(1) memoria (para una cantidad acotada e independiente del input de punteros e ints), 
+la complejidad espacial debería ser O(N + N^2 + K) = O(N^2 + K).
+3.c.
+Se puede agregar una pequeña poda para no continuar la recursión en casos en los que ya es lógicamente imposible llegar a una solución válida (de longitud K),
+pasando desde:
+algoritmo maxisubconjunto(k, i, suma):
+	Si k = 0:
+		...
+Hacia:
+algoritmo maxisubconjunto(k, i, suma):
+	Si k > N-i:
+		terminar
+	Si no, si k = 0:
+		...
+4.a.
+Ver guia01e04.py.
+4.b.
+Cada llamado es O(N) y hay N! llamados, por lo tanto el algoritmo tiene complejidad temporal O(N*N!).
+Espacialmente el algoritmo es O(N) en cuanto a las estructuras de datos, y el call stack puede tener a lo sumo N llamados recursivos apilados de tamaño O(1).
+Por lo tanto la complejidad espacial del algoritmo es O(N).
+4.c.
+Como las soluciones [1,2,3], [2,3,1] y [3,1,2] son equivalentes (representan la misma ruta), 
+se puede obtener una poda que divide la complejidad temporal por un factor de N (resultando en complejidad O(N!))
+fijando el primer elemento de la solución, por ejemplo en 0.
+Estos cambios están aplicados en el archivo guia01e04.py. Las lineas modificadas por el cambio tienen su versión original comentada.
 
-algoritmo maxiconjunto(n, k, M, numeros, solucion, suma):
-    algoritmo maxisubconjunto_aux(n, k, M, numeros, solucion, optimo):
-        algoritmo sumatoria(M, indices):
-            inicializar res en 0
-            para cada indice i en indices:
-                para cada indice j en indices:
-                    res += M[i, j]
-            retornar res
+5.a.
+Estoy tan convencido que duele, la verdad. Que alguien por favor me libere de mi agonizante autoconvencimiento. 
+No conozco más que la realidad absoluta de la verdad del enunciado. Daría todo por poder volver a dudar...
+5.b.
+En efecto como ss'C toma dos parametros uint n y k hay a lo sumo n*k inputs posibles.
+Si k < 2^n/n entonces algunos llamados a ss'C se hacen muchas veces.
+Ejemplo: Con C = {1,1,1,0} y k = 3, se llama a la función como ss'C(3,3) varias veces (porque 4-1 (i-1) y 3, 3-0 (j, j-C[i]) son el mismo valor).
+5.c.
+Ver 5.a.
+5.d.
+Como en cada llamado todas las operaciones son O(1), suponiendo como peor caso tener que computar la matriz entera,
+la complejidad es O(nk) * O(1) = O(nk). En 1.f. la complejidad era O(2^N).
+Si k << 2^n/n, es mejor el algoritmo de PD. Si no, es mejor el de backtracking.
+5.e.
+Ver 5.a. y 5.c.
+5.f.
+5.g.
 
-        si #(solucion) = k:
-            retornar [(suma, solucion)]
+6.a.
+Asumiendo que se tienen disponibles globalmente los valores B, c porque en caso contrario creo que lo que pide el enunciado sería imposible:
+cc(b, k) =
+  | (c-k, #B-#b)                                             si k <= 0
+  | min{cc(b - {last b}, k - (last b)), cc(b - {last b}, k)} si no
+Donde min prioriza el peimrer elemento de la tupla, pero en caso de empate desempata con el segundo.
+6.b, c, d, e, f.
+Ver guia01e06.py.
+6.g.
+6.h.
 
-        res = []
-        para cada numero en numeros:
-            concatenar res con algoritmo maxisubconjunto_aux(n, k, M, numeros - {numero}, solucion + {numero}, sumatoria(M, solucion + {numero}))
-        retornar res
+7.a.
+¿En serio van a seguir haciendome esto?
+Nunca comprenderan a un pobre pibe.
+7.b.
+Se tiene a P disponible globalmente.
+astrotrade(j, c) = 
+  | -inf                             si c < 0 o c > j // Caso imposible
+  | P[1]                             si c = 1 y j = 1 // Caso base 1, indexo desde 1 (-.-) <- Me rn
+  | 0                                si c = 0 y j = 1 // Caso base 2
+  | max{                             si no            // Caso recursivo
+      - P[j] + astrotrade(j-1, c-1),
+      + P[j] + astrotrade(j-1, c+1),
+      astrotrade(j-1, c)
+    }
+7.c.
+¿Qué dato? Asumo que se refiere a qué llamado a función. Es astrotrade(n, 0), indicando que se deben tener 0 asteroides al fin del día n.
+Indexando desde 0, sería astrotrade(n-1, 0) (y tendrían que realizarse cambios en la implementación, ver próximo inciso).
+7.d.
+Ver guia01e07.py.
+7.e.
+7.f.
 
-    retornar el primer elemento de algoritmo maxisubconjunto_aux(n, k, M, numeros, solucion, optimo) ordenado de mayor a menor en el primer elemento de cada tupla
+8.a.
+Basta por favor.
+8.b.
+C, el array de puntos de corte posibles, está disponible globalmente.
+ce(i, j, l) = 
+  | +inf                                                                                                               si j < i o i < 1 o j > #C // Caso imposible
+  | l                                                                                                                  si j = i                  // Caso base
+  | l + min{ce(i, k, C[k]) + ce(k, j, l-C[k]) - C[k] para todo k t.q. i<k<j ++ [ce(i+1, j, l-C[i]), ce(i, j-1, C[j])]} si no                     // Caso recursivo
+La solución está dada por ce(1, #C, L), indexando desde 1, donde L es la longitud en metros de la vara entera.
+Requiere de preprocesar el input crudo ordenandolo de forma creciente... no veo cómo hacerlo sin imponer esta condición,
+o en todo caso me parece lo más natural (y lo que estoy seguro terminaría siendo más eficiente) tener ordenado al input.
+8.c.
+Ver guia01e08.py.
+8.d.
+C está disponible globalmente.
+ce(i, j) = 
+  | +inf                                                        si j <= i o i < 1 o j > #C // Caso imposible
+  | 0                                                           si j = i+1                 // Caso base
+  | C[j]-C[i] + min{ce(i, k) + ce(k, j) para todo k t.q. i<k<j} si no                      // Caso recursivo
+La solución está dada por ce(1, #C), indexando desde 1.
+Requiere de preprocesar el input crudo ordenandolo de forma creciente, agregandole 0 al final y la longitud total al final.
+Por ejemplo, un input como (2, 4, 7) con longitud 10 se convertiría en un C de la forma C = (0, 2, 4, 7, 10).
+Ver guia01e08.py. // Duda: ¿Cómo sería la comparación con bottom-up? O directamente, ¿cómo sería bottom-up? Aplica para incisos c y d.
 
+9.a.
+Probar todas las combinaciones, registrando los cambios en hp relativos al inicial acumulados en cada paso. Elegir el camino con el máximo de hp mínima (requiere sólo guardar el cumulativo actual y el mínimo total entre paso y paso, 2 ints). Elegir el mínimo de HP en base a ese valor.
+9.b.
+...
+9.c.
+A está disponible globalmente, así como sus dimensiones n y m.
+tv(i, j) = 
+  | max{- A[i][j] + 1, 1}                         si i = M y j = N
+  | max{tv(i, j+1) - A[i][j], 1}                  si j < N y i = M
+  | max{tv(i+1, j) - A[i][j], 1}                  si j = N y i < M
+  | max{min{tv(i+1, j), tv(i, j+1)} - A[i][j], 1} si no
+Indexando desde 1. La solución está dada por tv(0, 0).
+9.d.
+Ver guia01e09.py.
+9.e.
 
+10.a.
+Probar todas las combinaciones posibles. En cada paso evaluar que haber roto la condición de validez para podar el árbol de llamados.
+Devolver el largo de la combinación válida más larga. Requiere guardar el máximo agregable de peso por encima de la pila en cada paso.
+Si se agrega más del máximo, la rama se poda (por ej. devolviendo 0).
+10.b.
+W y S están disponibles globalmente, así como su dimensión n.
+pc(i, s_min) = 
+  | 0                                                       si i > N o si s_min <= 0
+  | max{1 + pc(i+1, S[i]), pc(i+1, s_min)}                  si s_min = +inf
+  | max{1 + pc(i+1, min{s_min-W[i], S[i]}), pc(i+1, s_min)} si no
+La solucion está dada por pc(0, +inf).
+10.c.
+Ver guia01e10.py.
+10.d.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+11.a.
 

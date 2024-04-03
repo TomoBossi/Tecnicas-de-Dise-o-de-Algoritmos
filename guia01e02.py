@@ -33,5 +33,3 @@ def cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros):
             res += cuantos_cuadrados_magicos(n, cuadrado, prox_i, prox_j, numeros - {numero})
     cuadrado[i][j] = 0 # BACKTRACKING
     return res
-
-print(cuantos_cuadrados_magicos(3, [[0,0,0],[0,0,0],[0,0,0]], 0, 0, {1,2,3,4,5,6,7,8,9}))
