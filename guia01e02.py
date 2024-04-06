@@ -8,11 +8,11 @@ def cuantos_cuadrados_magicos(n, cuadrado, i, j, numeros):
             res = res and sum(cuadrado[i]) == sum([cuadrado[j][i] for j in range(n)]) == (n**3 + n)/2
         res = res and sum([cuadrado[i][i] for i in range(n)]) == sum([cuadrado[i][n-1-i] for i in range(n)]) == (n**3 + n)/2
         return res
-        
+
     if i == n:
         if es_cuadrado_magico(n, cuadrado):
             print(cuadrado)
-            return True
+            return True 
         return False
 
     res = 0
