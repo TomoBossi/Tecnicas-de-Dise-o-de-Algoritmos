@@ -165,8 +165,56 @@ la complejidad es O(nk) * O(1) = O(nk). En 1.f. la complejidad era O(2^N).
 Si k << 2^n/n, es mejor el algoritmo de PD. Si no, es mejor el de backtracking.
 5.e.
 Ver 5.a. y 5.c.
-5.f.
+5.f. 
+La observación clave está en que en la iteración sobre i (el loop externo) sólo se usan los valores en i-1. 
+Por lo tanto, en vez de usarse una matriz (n + 1)*(k + 1) puede usarse usa de vector de (k + 1) elementos.
+Computado V, la solución al problema está dada por V[k].
+1) subset_sum(C, k): // computa V[j] para todo 0 ≤ j ≤ k.
+2) Inicializar V[j] := (j = 0) para todo 0 ≤ j ≤ k.
+3) Para i = 1, ..., n y para j = 0, ..., k:
+4) Poner V[j] := V[j] ∨ (j − C[i] >= 0 ∧ V[j − C[i]])
 5.g.
+QVQ ss'_C es correcta.
+ss'_C(i, j) =
+  | j = 0                                    si i = 0
+  | ss’_C(i − 1, j)                          si i != 0 ∧ C[i] > j
+  | ss’_C(i − 1, j) ∨ ss’_C(i − 1, j − C[i]) si no
+Es decir, QVQ vale P(i): ss'_C(i, j) = True <=> existe un subconjunto de {c1, c2, ..., ci} que suma j.
+Prueba por inducción en i:
+
+- Caso base:
+QVQ P(0): ss'_C(0, j) = True <=> existe un subconjunto de {} que suma j
+=>)
+Por definición, ss'_C(0, j) = (j = 0). Sólo vale (j = 0) = True si j = 0.
+Por lo tanto se debe probar: 
+(j = 0) => existe un subconjunto de {} que suma j
+Esto es verdadero, pues si j = 0 existe un subconjunto que suma j y es {}.
+<=)
+El único subconjunto de {} es {}. Su suma es 0.
+Por lo tanto se debe probar:
+(j = 0) => ss'_C(0, j) = True
+Esto es verdadero, pues ss'_C(0, 0) = (0 = 0) = True
+
+- Caso inductivo:
+QVQ P(i) => P(i+1): (ss'_C(i, j) = True <=> existe un subconjunto de {c1, c2, ..., ci} que suma j) => (ss'_C(i+1, j) = True <=> existe un subconjunto de {c1, c2, ..., ci, ci+1} que suma j)
+{HI} ss'_C(i, j) = True <=> existe un subconjunto de {c1, c2, ..., ci} que suma j
+{TI} ss'_C(i+1, j) = True <=> existe un subconjunto de {c1, c2, ..., ci, ci+1} que suma j
+
+=>)
+ss'_C(i+1, j) = True es equivalente a ss'_C(i, j) = True si C[i] > j, o (ss'_C(i, j) v ss'_C(i, j - C[i+1])) = True si no. Puedo separar la demostración para =>) en estos casos:
+=>, C[i] > j)
+Aplicando {HI}, QVQ existe un subconjunto de {c1, c2, ..., ci} que suma j => existe un subconjunto de {c1, c2, ..., ci, ci+1} que suma j
+Esto es verdadero, pues todo subconjunto de {c1, c2, ..., ci} es subconjunto de {c1, c2, ..., ci, ci+1} (el primer conjunto es un subconjunto del segundo).
+Queda ver que la implicanción =>) valga también en el caso restante.
+=>, C[i] <= j)
+Aplicando {HI}, QVQ existe un subconjunto de {c1, c2, ..., ci} que suma j - C[i+1] => existe un subconjunto de {c1, c2, ..., ci, ci+1} que suma j
+Esto es verdadero: un subconjunto de {c1, c2, ..., ci} que haga verdadera a la hipótesis también será subconjunto de {c1, c2, ..., ci, ci+1} (por la misma justificación que en =>, C[i] > j)).
+Llamemos c' a este subconjunto (o a alguno de estos subconjuntos). Como ci+1 pertenece a {c1, c2, ..., ci, ci+1}, (c' U {ci+1}) es uno de sus subconjuntos. 
+Como los elementos de c' suman j - C[i+1] por hipótesis, entonces agregar ci+1 a c' resulta en que los elementos sumen j. Por lo tanto, queda demostrada la implicanción.
+Con esto, queda demostrada la propiedad para el caso =>).
+
+<=)
+
 
 6.a.
 Asumiendo que se tienen disponibles globalmente los valores B, c porque en caso contrario creo que lo que pide el enunciado sería imposible:
