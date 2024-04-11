@@ -21,7 +21,7 @@ int main(){
                 M[t][h] += h<F ? (h>0 ? M[t][h-1]:0):max(M[t][h-1], M[T][h-F]); // To get M[t][h] take the amount of acorns from tree t and height h and sum the following to it: if 0 < h < F then the max acorns attaninable by going down one feet in the same tree, if h = 0 then 0 (because there is no possible lower height); otherwise, if h >= F, the max acorns attainable by either going down one foot in the same tree or jumping to another tree and dropping F feet at once
                 M[T][h] = max(M[T][h], M[t][h]);                                // Save the max acorns attainable from height h across all trees
             }
-        }                                                                       // By the end, the memorization matrix and array are fully computed
+        }                                                                       // By the end, the memorization matrix is fully computed
         cout << M[T][H-1] << '\n';                                              // Output test case result to stdout
     }
     cin >> C;                                                                   // Parse trailing 0
